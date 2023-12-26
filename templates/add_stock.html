@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Stock</title>
+
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- Include SCSS styles directly in the HTML -->
+    <style>
+        body {
+            background-color: #1a202c; /* Dark mode background color */
+            color: #cbd5e0; /* Text color */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        h1 {
+            color: #4299e1; /* Heading color */
+            text-align: center;
+            margin-top: 20px;
+            font-size: 2rem; /* Bigger font size */
+            font-weight: bold; /* Bold font */
+        }
+
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input {
+            padding: 10px;
+            margin-bottom: 20px;
+            width: 300px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4299e1;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #2c5282; /* Hover background color */
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            color: #4299e1;
+            margin-top: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #2c5282; /* Hover link color */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto">
+        <h1 class="text-center">Add Stock</h1>
+        <form method="POST" action="/employee/add_stock">
+            <input type="text" id="barcode_data" name="barcode_data" style="display: none">
+            
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" required>
+
+            <label for="product_name">Product Name:</label>
+            <input type="text" id="product_name" name="product_name" required>
+
+            <label for="price">Price:</label>
+            <input type="text" id="price" name="price" required>
+
+            <!-- Add additional fields as needed -->
+
+            <button type="submit">Add Stock</button>
+        </form>
+        <a href="/display_stock">View Stock</a>
+    </div>
+</body>
+</html>

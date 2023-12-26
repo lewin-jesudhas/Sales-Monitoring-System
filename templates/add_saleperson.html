@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Salesperson</title>
+
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- Include SCSS styles directly in the HTML -->
+    <style>
+        body {
+            background-color: #1a202c; /* Dark mode background color */
+            color: #cbd5e0; /* Text color */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        h1 {
+            color: #4299e1; /* Heading color */
+            text-align: center;
+            margin-top: 20px;
+            font-size: 2rem; /* Bigger font size */
+            font-weight: bold; /* Bold font */
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: #2d3748; /* Form background color */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #cbd5e0;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+            background-color: #4a5568; /* Input background color */
+            border: 1px solid #4a5568; /* Input border color */
+            border-radius: 4px;
+            color: #cbd5e0;
+        }
+
+        input[type="submit"] {
+            background-color: #4299e1; /* Submit button background color */
+            color: #1a202c; /* Submit button text color */
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2c5282; /* Hover submit button background color */
+        }
+    </style>
+</head>
+<body>
+    <!-- Your HTML content remains unchanged -->
+    <div class="container mx-auto">
+        <h1 class="text-center">Add New Salesperson</h1>
+        <form method="post" action="/add_salesperson">
+            <label for="salesperson_id">Salesperson ID:</label>
+            <input type="text" name="salesperson_id" required><br>
+
+            <label for="name">Name:</label>
+            <input type="text" name="name" required><br>
+
+            <label for="contact_info">Contact Info:</label>
+            <input type="text" name="contact_info" required><br>
+
+            <label for="region_id">Region ID:</label>
+            <input type="text" name="region_id" required><br>
+
+            <label for="training_progress">Training Progress:</label>
+            <select name="training_progress" required>
+                <option value="Not Started">Not Started</option>
+                <option value="Started">Started</option>
+                <option value="Half Complete">Half Complete</option>
+                <option value="Complete">Complete</option>
+            </select><br>
+
+            <label for="incentives">Incentives:</label>
+            <input type="text" name="incentives" required><br>
+
+            <input type="submit" value="Add Salesperson">
+        </form>
+    </div>
+
+    <!-- You can include additional Tailwind CSS plugins or custom styles if needed -->
+
+    <!-- Include Bootstrap JS (optional, for certain components) -->
+    <!-- This can be removed if not required -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

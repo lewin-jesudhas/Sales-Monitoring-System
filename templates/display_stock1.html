@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Data</title>
+
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- Include SCSS styles directly in the HTML -->
+    <style>
+        body {
+            background-color: #1a202c; /* Dark mode background color */
+            color: #cbd5e0; /* Text color */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        h1 {
+            color: #4299e1; /* Heading color */
+            text-align: center;
+            margin-top: 20px;
+            font-size: 2rem; /* Bigger font size */
+            font-weight: bold; /* Bold font */
+        }
+
+        table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #2d3748; /* Table background color */
+            border-radius: 8px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #4a5568; /* Table border color */
+        }
+
+        th {
+            background-color: #2d3748; /* Table header background color */
+            color: #cbd5e0;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        tr {
+            transition: background-color 0.3s;
+        }
+
+        tr:nth-child(even) {
+            background-color: #4a5568; /* Alternate row background color */
+        }
+
+        tr:hover {
+            background-color: #718096; /* Hover row background color */
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            color: #4299e1;
+            margin-top: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #2c5282; /* Hover link color */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto">
+        <h1 class="text-center">Product Data</h1>
+        <table class="table-auto border w-full">
+            <thead>
+                <tr class="text-center">
+                    <th class="bg-blueviolet">ProductID</th>
+                    <th class="bg-blueviolet">ProductName</th>
+                    <th class="bg-blueviolet">Price</th>
+                    <th class="bg-blueviolet">Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr class="text-center">
+                    <td>{{ product[0] }}</td>
+                    <td>{{ product[1] }}</td>
+                    <td>{{ product[2] }}</td>
+                    <td>{{ product[3] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/employee/add_stock">Add Stock</a>
+    </div>
+</body>
+</html>

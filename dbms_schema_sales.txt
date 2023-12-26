@@ -1,0 +1,176 @@
+DROP TABLE Products CASCADE CONSTRAINTS;
+DROP TABLE RegionalOffices CASCADE CONSTRAINTS;
+DROP TABLE Salespersons CASCADE CONSTRAINTS;
+DROP TABLE Dealers CASCADE CONSTRAINTS;
+DROP TABLE Orders CASCADE CONSTRAINTS;
+DROP TABLE Payments CASCADE CONSTRAINTS;
+
+
+REM Products Table
+CREATE TABLE Products (
+    ProductID INT PRIMARY KEY,
+    ProductName VARCHAR(255),
+    Price DECIMAL(10, 2),
+    Quantity INT
+);
+
+REM Regional Offices Table
+CREATE TABLE RegionalOffices (
+    RegionID INT PRIMARY KEY,
+    RegionName VARCHAR(255),
+    Location VARCHAR(255),
+    Phone INT
+);
+
+REM Salespersons Table
+CREATE TABLE Salespersons (
+    SalespersonID INT PRIMARY KEY,
+    Name VARCHAR(255),
+    ContactInfo VARCHAR(255),
+    RegionID INT,
+    TrainingProgress VARCHAR(30),
+    Incentives DECIMAL(10, 2) DEFAULT 0.0,
+    FOREIGN KEY (RegionID) REFERENCES RegionalOffices(RegionID)
+);
+
+REM Dealers Table
+CREATE TABLE Dealers (
+    DealerID INT PRIMARY KEY,
+    Name VARCHAR(255),
+    ContactInfo VARCHAR(255),
+    RegionID INT,
+    FOREIGN KEY (RegionID) REFERENCES RegionalOffices(RegionID)
+);
+
+DROP SEQUENCE order_id_seq;
+CREATE SEQUENCE order_id_seq START WITH 4 INCREMENT BY 1;
+REM Orders Table
+CREATE TABLE Orders (
+    OrderID INT DEFAULT order_id_seq.NEXTVAL PRIMARY KEY,
+    ProductID INT,
+    DealerID INT,
+    SalespersonID INT,
+    Quantity INT,
+    OrderDate DATE,
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+    FOREIGN KEY (DealerID) REFERENCES Dealers(DealerID),
+    FOREIGN KEY (SalespersonID) REFERENCES Salespersons(SalespersonID)
+);
+
+REM Payments Table
+DROP SEQUENCE payment_id_seq;
+CREATE SEQUENCE payment_id_seq START WITH 4 INCREMENT BY 1;
+CREATE TABLE Payments (
+    PaymentID INT DEFAULT payment_id_seq.NEXTVAL PRIMARY KEY,
+    OrderID INT,
+    Amount DECIMAL(10, 2),
+    PaymentDate DATE,
+    PaymentMode VARCHAR(50),
+    PaymentStatus Varchar(30),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
+);
+
+REM Add CHECK constraint and DEFAULT value to Salespersons Table
+ALTER TABLE Salespersons
+MODIFY TrainingProgress VARCHAR(20) DEFAULT 'Not Started' CHECK (TrainingProgress IN ('Not Started', 'Started', 'Half Complete', 'Complete'));
+
+ALTER TABLE Payments
+MODIFY PaymentStatus VARCHAR(20) DEFAULT 'Not Complete' CHECK (PaymentStatus IN ('Not Complete', '50%', '75%', 'Complete'));
+
+ALTER table RegionalOffices
+ADD CHECK (LENGTH(TO_CHAR(Phone))=10);
+
+INSERT INTO Products VALUES (8904083300755, 'Milky Mist Chocolate', 35, 50);
+INSERT INTO Products VALUES (8901063029255, 'Jim Jam', 10, 50);
+INSERT INTO Products VALUES (8906005505446, 'Bikano Rasgulla', 150, 75);
+SELECT * FROM Products;
+INSERT INTO RegionalOffices VALUES (1, 'KMF Nandini', 'Bengaluru', 9944332211);
+INSERT INTO RegionalOffices VALUES (2, 'South Region', 'Chennai', 9909088776);
+INSERT INTO RegionalOffices VALUES (3, 'North KA', 'Dharwad', 9098765432);
+SELECT * FROM RegionalOffices;
+INSERT INTO Salespersons VALUES (1, 'Sam Kumar', 'samkum@gmail.com', 1, 'Started', 500.0);
+INSERT INTO Salespersons VALUES (2, 'Anthony Das', 'antodas@gmail.com', 2, 'Not Started', 0.0);
+INSERT INTO Salespersons VALUES (3, 'Rohan John', 'rojo@yahoo.com', 3, 'Complete', 1000.0);
+SELECT * FROM Salespersons;
+INSERT INTO Dealers VALUES (1, 'Star Hypermart', 'star@gmail.com', 1);
+INSERT INTO Dealers VALUES (2, 'Pheonix Mall', 'pheonix@yahoo.com', 2);
+INSERT INTO Dealers VALUES (3, 'Manjunath Store', 'manj@gmail.com', 3);
+SELECT * FROM Dealers;
+INSERT INTO Orders VALUES (1, 8904083300755, 1, 1, 20, TO_DATE('2023-10-15', 'YYYY-MM-DD'));
+INSERT INTO Orders VALUES (2, 8901063029255, 2, 2, 10, TO_DATE('2023-11-20', 'YYYY-MM-DD'));
+INSERT INTO Orders VALUES (3, 8906005505446, 3, 3, 15, TO_DATE('2023-09-25', 'YYYY-MM-DD'));
+SELECT * FROM Orders;
+INSERT INTO Payments VALUES (1, 1, 50.0, TO_DATE('2023-10-20', 'YYYY-MM-DD'), 'CASH', 'Complete');
+INSERT INTO Payments VALUES (2, 2, 30.0, TO_DATE('2023-11-25', 'YYYY-MM-DD'), 'GPAY', '50%');
+INSERT INTO Payments VALUES (3, 3, 45.0, TO_DATE('2023-09-30', 'YYYY-MM-DD'), 'CASH', 'Not Complete');
+SELECT * FROM Payments;
+
+REM Updating the quantity in products table
+CREATE OR REPLACE TRIGGER update_product_quantity_trigger
+AFTER INSERT ON Orders
+FOR EACH ROW
+BEGIN
+    -- Update product quantity after an order is placed
+    UPDATE Products
+    SET Quantity = Quantity - :NEW.Quantity
+    WHERE ProductID = :NEW.ProductID;
+END;
+/
+
+
+REM To insert a valid salesperson
+CREATE OR REPLACE PROCEDURE insert_salesperson(
+    p_salesperson_id IN INT,
+    p_name IN VARCHAR2,
+    p_contact_info IN VARCHAR2,
+    p_region_id IN INT,
+    p_training_progress IN VARCHAR2,
+    p_incentives IN DECIMAL
+)
+AS
+BEGIN
+    INSERT INTO Salespersons VALUES (
+        p_salesperson_id,
+        p_name,
+        p_contact_info,
+        p_region_id,
+        p_training_progress,
+        p_incentives
+    );
+    COMMIT;
+END insert_salesperson;
+/
+
+
+REM For addition of stock and updating stock
+CREATE OR REPLACE PROCEDURE ADD_STOCK_PROC (
+    p_product_id IN INT,
+    p_product_name IN VARCHAR2,
+    p_price IN DECIMAL,
+    p_quantity IN INT
+)
+AS
+    v_existing_quantity INT;
+BEGIN
+    BEGIN
+        -- Check if the product with the given barcode exists
+        SELECT Quantity INTO v_existing_quantity FROM Products WHERE ProductID = p_product_id;
+
+        -- If no data is found, set the existing quantity to NULL
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                v_existing_quantity := NULL;
+    END;
+
+    IF v_existing_quantity IS NOT NULL THEN
+        -- If the product exists, increment the quantity
+        UPDATE Products SET Quantity = v_existing_quantity + p_quantity WHERE ProductID = p_product_id;
+    ELSE
+        -- If the product doesn't exist, insert a new record
+        INSERT INTO Products (ProductID, ProductName, Price, Quantity)
+        VALUES (p_product_id, p_product_name, p_price, p_quantity);
+    END IF;
+
+    COMMIT;
+END ADD_STOCK_PROC;
+/

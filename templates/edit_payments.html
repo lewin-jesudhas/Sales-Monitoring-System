@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Payment Status</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+<div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+    <h1 class="text-3xl font-bold mb-6 text-center">Edit Payment Status</h1>
+    
+    {% if message %}
+        <p class="text-green-600 text-center">{{ message }}</p>
+    {% endif %}
+    
+    {% if error %}
+        <p class="text-red-600 text-center">{{ error }}</p>
+    {% endif %}
+
+    <form method="post">
+        <div class="mb-4">
+            <label for="order_id" class="block text-sm font-medium text-gray-600">Select Order:</label>
+            <select id="order_id" name="order_id" required
+                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                {% for order in orders %}
+                    <option value="{{ order[0] }}">{{ order[0] }} - {{ order[1] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label for="payment_status" class="block text-sm font-medium text-gray-600">New Payment Status:</label>
+            <select id="payment_status" name="payment_status" required
+                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <option value="Not Complete">Not Complete</option>
+                <option value="50%">50%</option>
+                <option value="75%">75%</option>
+                <option value="Complete">Complete</option>
+            </select>
+        </div>
+
+        <button type="submit"
+                class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-lg font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Update Payment Status
+        </button>
+    </form>
+</div>
+
+</body>
+</html>

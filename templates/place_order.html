@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place an Order</title>
+    <style>
+        /* Your existing styles remain unchanged */
+
+        label, select {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Place an Order</h1>
+    {% if message %}
+        <p class="message">{{ message }}</p>
+    {% endif %}
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+    <form id="orderForm" method="post">
+        <label for="product_id">Product ID:</label>
+        <input type="number" id="product_id" name="product_id" required><br>
+
+        <label for="dealer_id">Dealer ID:</label>
+        <input type="number" id="dealer_id" name="dealer_id" required><br>
+
+        <label for="salesperson_id">Salesperson ID:</label>
+        <input type="number" id="salesperson_id" name="salesperson_id" required><br>
+
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" required><br>
+
+        <!-- New Payment Mode Dropdown -->
+        <label for="payment_mode">Payment Mode:</label>
+        <select id="payment_mode" name="payment_mode" required>
+            <option value="CASH">CASH</option>
+            <option value="GPAY">GPAY</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <!-- New Payment Status Dropdown -->
+        <label for="payment_status">Payment Status:</label>
+        <select id="payment_status" name="payment_status" required>
+            <option value="Not Complete">Not Complete</option>
+            <option value="50%">50%</option>
+            <option value="75%">75%</option>
+            <option value="Complete">Complete</option>
+        </select>
+
+        <button type="submit">Place Order</button>
+    </form>
+</div>
+
+</body>
+<script>
+    {% if total_amount %}
+        alert("Order placed successfully! Total payable amount: ₹{{total_amount}}");
+    {% endif %}
+</script>
+</html>
