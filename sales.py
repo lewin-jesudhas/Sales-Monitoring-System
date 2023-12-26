@@ -100,55 +100,11 @@ def capture_and_decode_barcode():
 
     # Release the webcam
     cap.release()
-
     # Close any open windows (optional)
     cv2.destroyAllWindows()
 
     return barcode_data if decoded_objects else None
 
-# @app.route('/employee/add_stock', methods=['GET', 'POST'])
-# def add_stock():
-#     if request.method == 'POST':
-#         # Automatically open the webcam and decode barcode
-#         barcode_data = capture_and_decode_barcode()
-
-#         # Update the barcode input field with the scanned data
-#         if barcode_data:
-#             request.form = request.form.to_dict()
-#             request.form['barcode_data'] = barcode_data
-#         else:
-#             print("No barcode detected.")
-
-#         # Extract other form data
-#         quantity = request.form['quantity']
-#         # Add additional fields as needed
-
-#         cursor = connection.cursor()
-
-#         # Check if the product with the given barcode exists
-#         cursor.execute('SELECT * FROM Products WHERE ProductID = :1', (barcode_data,))
-#         existing_product = cursor.fetchone()
-
-#         if existing_product:
-#             # If the product exists, increment the quantity
-#             new_quantity = existing_product[3] + int(quantity)
-#             cursor.execute('UPDATE Products SET Quantity = :1 WHERE ProductID = :2', (new_quantity, barcode_data))
-#         else:
-#             # If the product doesn't exist, ask for additional details and insert a new record
-#             product_name = request.form['product_name']
-#             price = request.form['price']
-
-#             cursor.execute('''
-#                 INSERT INTO Products (ProductID, ProductName, Price, Quantity)
-#                 VALUES (:1, :2, :3, :4)
-#             ''', (barcode_data, product_name, price, quantity))
-
-#         connection.commit()  # Commit the transaction
-#         cursor.close()
-
-#         return redirect(url_for('display_stock'))
-
-#     return render_template('add_stock.html')
 
 @app.route('/employee/add_stock', methods=['GET', 'POST'])
 def add_stock():
@@ -270,32 +226,6 @@ def add_salesperson():
         return redirect(url_for('display_salespersons'))
 
     return render_template('add_saleperson.html')
-
-# @app.route('/add_salesperson', methods=['GET', 'POST'])
-# def add_salesperson():
-#     if request.method == 'POST':
-#         # Extract data from the form submission
-#         salesperson_id = request.form['salesperson_id']
-#         name = request.form['name']
-#         contact_info = request.form['contact_info']
-#         region_id = request.form['region_id']
-#         training_progress = request.form['training_progress']
-#         incentives = request.form['incentives']
-
-#         # Insert the new salesperson data into the Salespersons table
-#         cursor = connection.cursor()
-#         query = '''
-#         INSERT INTO Salespersons (SalespersonID, Name, ContactInfo, RegionID, TrainingProgress, Incentives)
-#         VALUES (:1, :2, :3, :4, :5, :6)
-#         '''
-#         cursor.execute(query, (salesperson_id, name, contact_info, region_id, training_progress, incentives))
-#         connection.commit()  # Commit the transaction
-#         cursor.close()
-
-#         return redirect(url_for('display_salespersons'))
-
-#     return render_template('add_saleperson.html')
-
 
 @app.route('/dealers')
 def display_dealers():
@@ -419,9 +349,7 @@ def edit_payments():
         JOIN Payments P ON O.OrderID = P.OrderID
         WHERE P.PaymentStatus <> 'Complete'
     """)
-
     orders = cursor.fetchall()
-
     return render_template('edit_payments.html', orders=orders)
     
 if __name__ == '__main__':
