@@ -11,7 +11,7 @@ import cv2
 app = Flask(__name__)
 
 # Replace 'your_oracle_connection_string' with your actual Oracle connection string
-oracle_connection_string = 'system/Jesudhas123%@localhost:1521/orcl'
+oracle_connection_string = 'your_oracle_connection_string'
 #lsnrtcl services for host string
 connection = cx_Oracle.connect(oracle_connection_string)
 
