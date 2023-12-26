@@ -15,7 +15,7 @@ Dependencies:
 - pip install cx_Oracle
 - pip install flask
 - pip install pyzbar
-(Replace your connection string in sales.py)
+- (Replace your connection string in sales.py)
 
 
 If you have issues installing cx_Oracle go to microsoft visual studio installer and install 
