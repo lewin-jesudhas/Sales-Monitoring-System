@@ -11,10 +11,10 @@ Features:
 - Calculating the sum of the payments received.
 
 Dependencies:
-Oracle sql *plus 21c
-pip install cx_Oracle
-pip install flask
-pip install pyzbar
+- Oracle sql *plus 21c
+- pip install cx_Oracle
+- pip install flask
+- pip install pyzbar
 (Replace your connection string in sales.py)
 
 
